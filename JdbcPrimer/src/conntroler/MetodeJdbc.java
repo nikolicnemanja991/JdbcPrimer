@@ -58,7 +58,7 @@ public class MetodeJdbc {
 			konekcija = uspostaviKonekciju("kursevi");
 			System.out.println("Konekcija je uspostavljena");
 			
-			String query = "UPDATE scourses SET cena = ? WHERE ime_kursa = ?";
+			String query = "UPDATE courses SET cena = ? WHERE ime_kursa = ?";
 			pst = konekcija.prepareStatement(query);
 			pst.setInt(1, cena);
 			pst.setString(2, imeKursa);
