@@ -2,17 +2,82 @@ package conntroler;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class MetodeJdbc {
 	
-	public static Connection uspostaviKonekciju(String imeBaze) throws SQLException {
+	private static Connection uspostaviKonekciju(String imeBaze) throws SQLException {
 		
 		final String url = "jdbc:mysql://localhost:3306/" + imeBaze;
 		final String user = "root";
 		final String password = "root";
 		
 		return DriverManager.getConnection(url, user, password);
+	}
+	
+	public boolean ubaciUtabeluKursevi (String imeKursa, String cena) {
+		Connection konekcija = null;
+		PreparedStatement statement = null;
+		
+		int cenaZaUpis = Integer.parseInt(cena);
+		
+		try {
+			konekcija = uspostaviKonekciju("kursevi");
+			System.out.println("Konekcija je uspostavljena");
+			
+			String query = "INSERT INTO courses VALUES(null,?,?)";
+			statement = konekcija.prepareStatement(query);
+			statement.setString(1, imeKursa);
+			statement.setInt(2, cenaZaUpis);
+			statement.execute();
+			System.out.println("Uspesno ubacen kurs!");
+			return true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+			return false;
+			
+		} finally {
+			try {
+				statement.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public boolean izmeniCenuKursa(String imeKursa, int cena) {
+		
+		Connection konekcija = null;
+		PreparedStatement pst = null;
+		
+		try {
+			konekcija = uspostaviKonekciju("kursevi");
+			System.out.println("Konekcija je uspostavljena");
+			
+			String query = "UPDATE scourses SET cena = ? WHERE ime_kursa = ?";
+			pst = konekcija.prepareStatement(query);
+			pst.setInt(1, cena);
+			pst.setString(2, imeKursa);
+			pst.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				pst.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+		
 	}
 
 }
