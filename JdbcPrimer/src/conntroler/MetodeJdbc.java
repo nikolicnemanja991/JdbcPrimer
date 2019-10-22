@@ -3,6 +3,7 @@ package conntroler;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -46,6 +47,11 @@ public class MetodeJdbc {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			try {
+				konekcija.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -65,6 +71,38 @@ public class MetodeJdbc {
 			pst.executeUpdate();
 			return true;
 		} catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		} finally {
+			try {
+				pst.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				konekcija.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+public boolean izbrisiKurs(String imeKursa) {
+		
+		Connection konekcija = null;
+		PreparedStatement pst = null;
+		
+		try {
+			konekcija = uspostaviKonekciju("kursevi");
+			System.out.println("Konekcija je uspostavljena");
+			
+			String query = "DELETE FROM courses WHERE ime_kursa = ?";
+			pst = konekcija.prepareStatement(query);
+			pst.setString(1, imeKursa);
+			pst.executeUpdate();
+			return true;
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return false;
@@ -74,10 +112,63 @@ public class MetodeJdbc {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
+			
+			try {
+				konekcija.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		
-		
-		
 	}
+
+    public void prikaziSveKurseve () {
+    	
+    	Connection konekcija = null;
+		PreparedStatement pst = null;
+		ResultSet res = null;
+		
+		try {
+			konekcija = uspostaviKonekciju("kursevi");
+			System.out.println("Konekcija je uspostavljena");
+			
+			String query = "SELECT * FROM courses";
+			pst = konekcija.prepareStatement(query);
+			
+			res = pst.executeQuery();
+			
+			System.out.println("ID ime cena");
+			System.out.println("-------------");
+			
+			while (res.next()) {
+				int id = res.getInt("id_courses");
+				String ime = res.getString("ime_kursa");
+				double cena = res.getDouble("cena");
+				
+				System.out.println(id + " " + ime + "" + cena);
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				res.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				pst.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				konekcija.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+    }
 
 }
