@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import model.Kurs;
+
 public class MetodeJdbc {
 	
 	private static Connection uspostaviKonekciju(String imeBaze) throws SQLException {
@@ -144,12 +146,63 @@ public boolean izbrisiKurs(String imeKursa) {
 				String ime = res.getString("ime_kursa");
 				double cena = res.getDouble("cena");
 				
-				System.out.println(id + " " + ime + "" + cena);
+				System.out.println(id + "   " + ime + "   " + cena);
 				
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				res.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				pst.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				konekcija.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+    }
+    
+    public Kurs vratiKursPoId (int id) {
+    	
+    	Connection konekcija = null;
+		PreparedStatement pst = null;
+		ResultSet res = null;
+		
+		Kurs kurs = new Kurs();
+		
+		try {
+			konekcija = uspostaviKonekciju("kursevi");
+			System.out.println("Konekcija je uspostavljena");
+			
+			String query = "SELECT * FROM courses WHERE id_courses = ?";
+			pst = konekcija.prepareStatement(query);
+			pst.setInt(1, id);
+			
+			res = pst.executeQuery();
+			
+			while (res.next()) {
+				kurs.setIdKursa(res.getInt("id_courses"));
+				kurs.setImeKursa(res.getString("ime_kursa"));
+				kurs.setCena(res.getDouble("cena"));
+				
+			}
+			
+			return kurs;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
 		}finally {
 			try {
 				res.close();

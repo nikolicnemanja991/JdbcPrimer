@@ -4,7 +4,7 @@ public class Kurs {
 	
 	private int idKursa;
 	private String imeKursa;
-	private int set;
+	private double cena;
 	
 	public int getIdKursa() {
 		return idKursa;
@@ -18,11 +18,11 @@ public class Kurs {
 	public void setImeKursa(String imeKursa) {
 		this.imeKursa = imeKursa;
 	}
-	public int getSet() {
-		return set;
+	public double getCena() {
+		return cena;
 	}
-	public void setSet(int set) {
-		this.set = set;
+	public void setCena(double d) {
+		this.cena = d;
 	}
 
 }
