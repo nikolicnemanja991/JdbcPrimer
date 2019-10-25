@@ -7,31 +7,26 @@ import java.util.Scanner;
 
 import conntroler.MetodeJdbc;
 import model.Kurs;
+import model.User;
 
 public class JdbcProject {
 
 	public static void main(String[] args) {
 		
 		MetodeJdbc metode = new MetodeJdbc();
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Unesite id usera: ");
+		String id = scanner.nextLine();
 		
-		metode.prikaziSveKurseve();
-		
-		Kurs k = metode.vratiKursPoId(3);
-		System.out.println(k.getIdKursa() + "   " + k.getImeKursa() + "   " + k.getCena());
-		
-		
-		
-		
-		//metode.ubaciUtabeluKursevi("Verilog", "15000");
-		//Scanner scanner = new Scanner(System.in);
-		//System.out.println("Unesite ime kursa");
-		//String imeKursa = scanner.nextLine();
-		//System.out.println("Unesite cenu");
-		//String cenaUnos = scanner.nextLine();
-		//int cena = Integer.parseInt(cenaUnos);
-		//scanner.close();
-		//metode.izmeniCenuKursa(imeKursa, cena);
-		
+		User user = metode.vratiUseraPoId(Integer.parseInt(id));
+		if (user.getIdUser() != 0) {
+			System.out.println("ID " + user.getIdUser());
+			System.out.println("USER NAME " + user.getUserName());
+			System.out.println("PASSWORD " + user.getPassword());
+			System.out.println("MSTBR " + user.getMaticniBroj());
+		} else {
+			System.out.println("Ne postoji user!");
+		}
 
 	}
 

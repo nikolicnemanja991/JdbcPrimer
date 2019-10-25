@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import model.Kurs;
+import model.User;
 
 public class MetodeJdbc {
 	
@@ -222,6 +223,62 @@ public boolean izbrisiKurs(String imeKursa) {
 				e.printStackTrace();
 			}
 		}
+    }
+    
+    public User vratiUseraPoId(int id) {
+    	
+    	Connection konekcija = null;
+		PreparedStatement pst = null;
+		ResultSet res = null;
+		
+		User user = new User();
+		
+		try {
+			konekcija = uspostaviKonekciju("kursevi");
+			System.out.println("Konekcija je uspostavljena");
+			
+			String query = "SELECT * FROM users WHERE id_users = ?";
+			pst = konekcija.prepareStatement(query);
+			pst.setInt(1, id);
+			
+			res = pst.executeQuery();
+			
+			while (res.next()) {
+				user.setIdUser(res.getInt("id_users"));
+				user.setUserName(res.getString("username"));
+				user.setPassword(res.getString("password"));
+				user.setMaticniBroj(res.getInt("mat_br"));
+			}
+			
+			return user;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			
+			return null;
+		} finally {
+			try {
+				res.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				pst.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+			try {
+				konekcija.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		
+		
     }
 
 }
