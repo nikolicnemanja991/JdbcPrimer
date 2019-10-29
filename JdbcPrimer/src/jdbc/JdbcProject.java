@@ -1,4 +1,5 @@
 package jdbc;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.sql.Connection;
@@ -26,13 +27,31 @@ public class JdbcProject {
 		 * System.out.println("MSTBR " + user.getMaticniBroj()); } else {
 		 * System.out.println("Ne postoji user!"); }
 		 */
-		List<User> lstUsers = metode.vratiSveUsere();
+		/*
+		 * List<User> lstUsers = metode.vratiSveUsere();
+		 * 
+		 * for (User u: lstUsers) { System.out.println("ID " + u.getIdUser());
+		 * System.out.println("USER NAME " + u.getUserName());
+		 * System.out.println("PASSWORD " + u.getPassword());
+		 * System.out.println("MSTBR " + u.getMaticniBroj()); }
+		 */
 		
-		for (User u: lstUsers) {
-			System.out.println("ID " + u.getIdUser());
-			 System.out.println("USER NAME " + u.getUserName());
-			 System.out.println("PASSWORD " + u.getPassword());
-			 System.out.println("MSTBR " + u.getMaticniBroj());
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Unesite username: ");
+		
+		String userName = scanner.nextLine();
+		
+		int id = metode.vratiIdPoUsername(userName);
+		
+		List<String> listaBrojevaTelefona = new ArrayList<String>();
+		if(id !=0 ) {
+			listaBrojevaTelefona = metode.vratiBrojTelefona(id);
+			
+			for (String s: listaBrojevaTelefona) {
+				System.out.println(s);
+			}
+		} else {
+			System.out.println("Nepostojeci user! ");
 		}
 
 	}
